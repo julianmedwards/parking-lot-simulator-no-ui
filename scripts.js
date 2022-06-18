@@ -5,10 +5,23 @@ const parkingLot = function (capacity, timeLimit) {
     this.parked = {}
     this.timeLimit = timeLimit // in seconds
     this.queue = new Map()
-    this.carCount = 0
+    this.visited = 0
+    this.served = 0
+    this.lotStatus = function () {
+        console.log('Lot max capacity: ' + this.capacity)
+        console.log('Maximum allowed parking time: ' + timeLimit + ' seconds')
+        console.log(
+            'Current filled parking spaces: ' + Object.keys(this.parked).length
+        )
+        console.log('Number of cars waiting to park: ' + this.queue.size)
+        console.log('Cars who have visited the lot: ' + this.visited)
+        console.log(
+            'Cars who have been served (finished their visit): ' + this.served
+        )
+    }
     this.carArrives = function () {
-        this.carCount += 1
-        let carId = 'car' + this.carCount
+        this.visited += 1
+        let carId = 'car' + this.visited
         this.queue.set(carId, Math.floor(Math.random() * this.timeLimit + 1))
 
         console.log(carId + ' arrived.')
@@ -27,6 +40,7 @@ const parkingLot = function (capacity, timeLimit) {
         }, this.parked[car] * 1000)
     }
     this.carLeaves = function (car) {
+        this.served += 1
         console.log(car + ' leaving.')
         delete this.parked[car]
 
