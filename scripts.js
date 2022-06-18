@@ -1,5 +1,6 @@
 'use strict'
 
+// Car object constructor.
 const Car = function (make, year, plate, parkingTime) {
     this.make = make
     this.year = year
@@ -7,6 +8,11 @@ const Car = function (make, year, plate, parkingTime) {
     this.parkingTime = parkingTime
 }
 
+// Creates random arguments to set properties for Car.
+// Takes an array of makes (str) and array of alphanumeric chars
+// to give a 7 digit license plate.
+// Gives a random year between 2000 and 2022 and planned parking time
+// between 1 and 5 seconds.
 function randomCarArgs(makes, chars) {
     let make = makes[Math.floor(Math.random() * makes.length)]
     let millenium = '20'
@@ -26,6 +32,10 @@ function randomCarArgs(makes, chars) {
     return [make, year, plate, parkingTime]
 }
 
+// Takes number to set max capacity and time limit in seconds (currently
+// unused). Automatically handles parking and removing cars when one is
+// passed with carArrives().
+// Does not save details of cars which have parked once they've left.
 const ParkingLot = function (capacity, timeLimit) {
     this.capacity = capacity
     this.timeLimit = timeLimit // in seconds
@@ -49,6 +59,7 @@ const ParkingLot = function (capacity, timeLimit) {
         )
     }
 
+    // Starts process of queuing, parking and having cars leave.
     this.carArrives = function (car) {
         this.visited += 1
         let carId = 'car' + this.visited
@@ -85,7 +96,9 @@ const ParkingLot = function (capacity, timeLimit) {
 
 const myParkingLot = new ParkingLot(10, 5)
 
-function startParking() {
+// Creates random cars equal to the numOfCars arg and sends them
+// to the parking lot.
+function startParking(numOfCars) {
     let makes = [
         'jeep',
         'tesla',
@@ -98,10 +111,12 @@ function startParking() {
     ]
     const CHARS = 'abcdefghijklmnopqrstuvwxyz1234567890'
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < numOfCars; i++) {
         let newCar = new Car(...randomCarArgs(makes, CHARS))
         myParkingLot.carArrives(newCar)
     }
 }
 
-startParking()
+startParking(100)
+
+setTimeout(() => startParking(10), 25000)
