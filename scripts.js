@@ -9,8 +9,14 @@ const Car = function (make, year, plate, parkingTime) {
 
 const randomCarArgs = function (makes, chars) {
     let make = makes[Math.floor(Math.random() * makes.length)]
-    let year =
-        '20' + Math.floor(Math.random() * 3) + Math.floor(Math.random() * 3)
+    let century = '20'
+    let decade = Math.floor(Math.random() * 3)
+    if (decade == 2) {
+        var lastYearDigit = Math.floor(Math.random() * 3)
+    } else {
+        var lastYearDigit = Math.floor(Math.random() * 10)
+    }
+    let year = century + decade + lastYearDigit
     let plate = ''
     for (let i = 0; i < 7; i++) {
         plate += chars[Math.floor(Math.random() * chars.length)]
