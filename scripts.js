@@ -1,12 +1,33 @@
 'use strict'
 
+const Car = function (make, year, plate, parkingTime) {
+    this.make = make
+    this.year = year
+    this.plate = plate
+    this.parkingTime = parkingTime
+}
+
+const randomCarArgs = function (makes, chars) {
+    let make = makes[Math.floor(Math.random() * makes.length)]
+    let year =
+        '20' + Math.floor(Math.random() * 3) + Math.floor(Math.random() * 3)
+    let plate = ''
+    for (let i = 0; i < 7; i++) {
+        plate += chars[Math.floor(Math.random() * chars.length)]
+    }
+    let parkingTime = Math.floor(Math.random() * 5 + 1)
+
+    return [make, year, plate, parkingTime]
+}
+
 const parkingLot = function (capacity, timeLimit) {
     this.capacity = capacity
-    this.parked = {}
     this.timeLimit = timeLimit // in seconds
+    this.parked = {}
     this.queue = new Map()
     this.visited = 0
     this.served = 0
+
     this.lotStatus = function () {
         console.log('Lot max capacity: ' + this.capacity)
         console.log('Maximum allowed parking time: ' + timeLimit + ' seconds')
@@ -19,10 +40,11 @@ const parkingLot = function (capacity, timeLimit) {
             'Cars who have been served (finished their visit): ' + this.served
         )
     }
-    this.carArrives = function () {
+
+    this.carArrives = function (car) {
         this.visited += 1
         let carId = 'car' + this.visited
-        this.queue.set(carId, Math.floor(Math.random() * this.timeLimit + 1))
+        this.queue.set(carId, car)
 
         console.log(carId + ' arrived.')
 
@@ -30,19 +52,21 @@ const parkingLot = function (capacity, timeLimit) {
             this.parkCar(carId)
         }
     }
-    this.parkCar = function (car) {
-        console.log(car + ' parked.')
-        this.parked[car] = this.queue.get(car)
-        this.queue.delete(car)
+
+    this.parkCar = function (carId) {
+        console.log(carId + ' parked.')
+        this.parked[carId] = this.queue.get(carId)
+        this.queue.delete(carId)
 
         setTimeout(() => {
-            this.carLeaves(car)
-        }, this.parked[car] * 1000)
+            this.carLeaves(carId)
+        }, this.parked[carId].parkingTime * 1000)
     }
-    this.carLeaves = function (car) {
+
+    this.carLeaves = function (carId) {
         this.served += 1
-        console.log(car + ' leaving.')
-        delete this.parked[car]
+        console.log(carId + ' leaving.')
+        delete this.parked[carId]
 
         if (this.queue.size !== 0) {
             let [nextCar] = this.queue.keys()
@@ -53,6 +77,23 @@ const parkingLot = function (capacity, timeLimit) {
 
 const myParkingLot = new parkingLot(10, 5)
 
-for (let i = 0; i < 100; i++) {
-    myParkingLot.carArrives()
+function startParking() {
+    const makes = [
+        'jeep',
+        'tesla',
+        'nissan',
+        'toyota',
+        'ford',
+        'chevrolet',
+        'volkswagen',
+        'audi',
+    ]
+    const chars = 'abcdefghijklmnopqrstuvwxyz1234567890'
+
+    for (let i = 0; i < 100; i++) {
+        let newCar = new Car(...randomCarArgs(makes, chars))
+        myParkingLot.carArrives(newCar)
+    }
 }
+
+startParking()
