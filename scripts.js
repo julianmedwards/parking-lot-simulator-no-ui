@@ -20,7 +20,7 @@ const randomCarArgs = function (makes, chars) {
     return [make, year, plate, parkingTime]
 }
 
-const parkingLot = function (capacity, timeLimit) {
+const ParkingLot = function (capacity, timeLimit) {
     this.capacity = capacity
     this.timeLimit = timeLimit // in seconds
     this.parked = {}
@@ -34,6 +34,8 @@ const parkingLot = function (capacity, timeLimit) {
         console.log(
             'Current filled parking spaces: ' + Object.keys(this.parked).length
         )
+        console.log('Cars currently parked: ')
+        console.dir(this.parked)
         console.log('Number of cars waiting to park: ' + this.queue.size)
         console.log('Cars who have visited the lot: ' + this.visited)
         console.log(
@@ -75,7 +77,7 @@ const parkingLot = function (capacity, timeLimit) {
     }
 }
 
-const myParkingLot = new parkingLot(10, 5)
+const myParkingLot = new ParkingLot(10, 5)
 
 function startParking() {
     const makes = [
