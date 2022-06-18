@@ -7,16 +7,16 @@ const Car = function (make, year, plate, parkingTime) {
     this.parkingTime = parkingTime
 }
 
-const randomCarArgs = function (makes, chars) {
+function randomCarArgs(makes, chars) {
     let make = makes[Math.floor(Math.random() * makes.length)]
-    let century = '20'
+    let millenium = '20'
     let decade = Math.floor(Math.random() * 3)
     if (decade == 2) {
         var lastYearDigit = Math.floor(Math.random() * 3)
     } else {
         var lastYearDigit = Math.floor(Math.random() * 10)
     }
-    let year = century + decade + lastYearDigit
+    let year = millenium + decade + lastYearDigit
     let plate = ''
     for (let i = 0; i < 7; i++) {
         plate += chars[Math.floor(Math.random() * chars.length)]
@@ -86,7 +86,7 @@ const ParkingLot = function (capacity, timeLimit) {
 const myParkingLot = new ParkingLot(10, 5)
 
 function startParking() {
-    const makes = [
+    let makes = [
         'jeep',
         'tesla',
         'nissan',
@@ -96,10 +96,10 @@ function startParking() {
         'volkswagen',
         'audi',
     ]
-    const chars = 'abcdefghijklmnopqrstuvwxyz1234567890'
+    const CHARS = 'abcdefghijklmnopqrstuvwxyz1234567890'
 
     for (let i = 0; i < 100; i++) {
-        let newCar = new Car(...randomCarArgs(makes, chars))
+        let newCar = new Car(...randomCarArgs(makes, CHARS))
         myParkingLot.carArrives(newCar)
     }
 }
